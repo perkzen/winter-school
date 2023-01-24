@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  mongodb_container:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+  backend_container:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb_container
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb_container
+volumes:
+  mongodb_data_container:
