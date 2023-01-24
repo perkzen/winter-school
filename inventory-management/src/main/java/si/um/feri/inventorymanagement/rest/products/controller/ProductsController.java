@@ -1,8 +1,10 @@
-package si.um.feri.inventorymanagement.rest.products;
+package si.um.feri.inventorymanagement.rest.products.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import si.um.feri.inventorymanagement.rest.products.vao.Product;
+import si.um.feri.inventorymanagement.rest.products.service.ProductsService;
 
 import java.util.List;
 
@@ -34,6 +36,12 @@ public class ProductsController {
     public ResponseEntity<String> deleteProduct(@PathVariable String id) {
         productsService.deleteProduct(id);
         return ResponseEntity.ok("Deleted product with id " + id + ".");
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, Product product) {
+        Product p = productsService.updateProduct(id, product);
+        return ResponseEntity.ok(p);
     }
 
 }

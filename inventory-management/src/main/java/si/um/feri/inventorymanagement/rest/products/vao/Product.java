@@ -1,4 +1,4 @@
-package si.um.feri.inventorymanagement.rest.products;
+package si.um.feri.inventorymanagement.rest.products.vao;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
