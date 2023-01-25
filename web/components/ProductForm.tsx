@@ -35,8 +35,8 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
     });
   }, [product, reset]);
 
-  const { dirtyFields } = formState;
-  const isDisabled = isEdit && Object.keys(dirtyFields).length < 6;
+  const { dirtyFields, isDirty } = formState;
+  const isDisabled = isEdit ? !isDirty : Object.keys(dirtyFields).length < 6;
 
   const { mutateAsync: saveProduct } = useMutation(
     (newProduct: Omit<Product, 'id'>) => ProductsApi.createProduct(newProduct)
@@ -67,6 +67,10 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
     reset();
   });
 
+  const { mutateAsync: updateProduct } = useMutation((product: Product) =>
+    ProductsApi.updateProduct(product)
+  );
+
   return (
     <div className={'flex justify-center items-center w-full mt-5'}>
       <div className={'shadow-lg rounded-lg bg-white px-5 py-5 w-1/2'}>
@@ -79,7 +83,6 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
                 'shadow rounded-full py-1 px-2 border-[1px] border-gray-300'
               }
             />
-
             <input
               {...register('manufacturer')}
               placeholder={'Manufacturer'}
