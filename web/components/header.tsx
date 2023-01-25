@@ -17,7 +17,7 @@ const Header: FC<HeaderProps> = ({ title, subtitle, onClick, buttonLabel }) => {
       {buttonLabel && (
         <div className={'flex items-center'}>
           <button
-            className={'shadow-lg bg-green-500 rounded-full p-3'}
+            className={'shadow-lg bg-green-500 text-white rounded-full p-3'}
             onClick={onClick}
           >
             {buttonLabel}

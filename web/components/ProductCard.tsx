@@ -16,13 +16,12 @@ const ProductCard: FC<CardProps> = ({ product, onClick }) => {
     >
       <div className={'flex flex-row justify-between w-full items-center'}>
         <div className={'flex flex-col'}>
-          <p>{product.displayName}</p>
           <p>{product.manufacturer}</p>
+          <p>{product.displayName}</p>
         </div>
-        <p>{product.description}</p>
-        <p>{product.type}</p>
-        <p>{product.quantity}</p>
-        <p>{product.price} $</p>
+        <p>Description: {product.description}</p>
+        <p>Quantity: {product.quantity}</p>
+        <p>Price: {product.price} $</p>
       </div>
     </div>
   );

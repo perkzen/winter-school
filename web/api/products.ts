@@ -30,4 +30,9 @@ export class ProductsApi {
     const response = await backend.put(`/products/${product.id}`, product);
     return response.data;
   }
+
+  static async deleteProduct(id: string) {
+    const response = await backend.delete(`/products/${id}`);
+    return response.data;
+  }
 }

@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Product, ProductsApi } from '../api/products';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/router';
 
 interface ProductFormProps {
   product?: Product;
@@ -14,24 +15,51 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
     Omit<Product, 'id'>
   >({
     defaultValues: {
+      displayName: '',
+      manufacturer: '',
+      description: '',
+      type: '',
+      quantity: undefined,
+      price: undefined,
+    },
+  });
+
+  useEffect(() => {
+    reset({
       displayName: product?.displayName,
       manufacturer: product?.manufacturer,
       description: product?.description,
       type: product?.type,
       quantity: product?.quantity,
       price: product?.price,
-    },
-  });
+    });
+  }, [product, reset]);
 
   const { dirtyFields } = formState;
   const isDisabled = isEdit && Object.keys(dirtyFields).length < 6;
 
-  const { mutateAsync } = useMutation((newProduct: Omit<Product, 'id'>) =>
-    ProductsApi.createProduct(newProduct)
+  const { mutateAsync: saveProduct } = useMutation(
+    (newProduct: Omit<Product, 'id'>) => ProductsApi.createProduct(newProduct)
   );
 
+  const { mutateAsync: deleteProduct } = useMutation(() =>
+    ProductsApi.deleteProduct(product?.id as string)
+  );
+
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    if (!product) return;
+    await toast.promise(deleteProduct(), {
+      loading: 'Deleting product',
+      success: 'Product deleted',
+      error: 'Error deleting product',
+    });
+    await router.push('/');
+  };
+
   const onSubmit = handleSubmit(async (data) => {
-    await toast.promise(mutateAsync(data), {
+    await toast.promise(saveProduct(data), {
       loading: 'Saving...',
       success: 'Saved!',
       error: 'Error',
@@ -94,7 +122,7 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
             <div className={'flex flex-row gap-8 w-full'}>
               <button
                 className={
-                  'shadow bg-green-500 rounded-full py-1 px-3 w-full ' +
+                  'shadow bg-green-500 text-white rounded-full py-1 px-3 w-full ' +
                   (isDisabled ? 'opacity-50 cursor-not-allowed' : '')
                 }
                 disabled={isDisabled}
@@ -103,7 +131,11 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
               </button>
               {isEdit && (
                 <button
-                  className={'shadow bg-red-500 rounded-full py-1 px-3 w-full '}
+                  type={'button'}
+                  onClick={handleDelete}
+                  className={
+                    'shadow bg-red-500 text-white rounded-full py-1 px-3 w-full '
+                  }
                 >
                   Delete
                 </button>
