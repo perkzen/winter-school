@@ -43,9 +43,14 @@ public class ProductsService {
             p.setDescription(product.getDescription());
             p.setType(product.getType());
             p.setManufacturer(product.getManufacturer());
+            p.setPrice(product.getPrice());
             return productsRepository.save(p);
         }
         return null;
+    }
+
+    public void deleteAll() {
+        productsRepository.deleteAll();
     }
 
 }

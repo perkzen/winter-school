@@ -1,6 +1,7 @@
 package si.um.feri.inventorymanagement.rest.products.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import si.um.feri.inventorymanagement.rest.products.vao.Product;
@@ -21,8 +22,8 @@ public class ProductsController {
         return ResponseEntity.ok(p);
     }
 
-    @PostMapping
-    public ResponseEntity<Product> createProduct(Product product) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product p = productsService.createProduct(product);
         return ResponseEntity.ok(p);
     }
@@ -39,10 +40,16 @@ public class ProductsController {
         return ResponseEntity.ok("Deleted product with id " + id + ".");
     }
 
-    @PutMapping("{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id, Product product) {
+    @PutMapping(path = "{id}", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Product> updateProduct(@PathVariable String id, @RequestBody Product product) {
         Product p = productsService.updateProduct(id, product);
         return ResponseEntity.ok(p);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteAll() {
+        productsService.deleteAll();
+        return ResponseEntity.ok("Deleted all products.");
     }
 
 }
