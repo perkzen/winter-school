@@ -6,7 +6,7 @@ interface CardProps {
   onClick: () => void;
 }
 
-const Card: FC<CardProps> = ({ product, onClick }) => {
+const ProductCard: FC<CardProps> = ({ product, onClick }) => {
   return (
     <div
       className={
@@ -28,4 +28,4 @@ const Card: FC<CardProps> = ({ product, onClick }) => {
   );
 };
 
-export default Card;
+export default ProductCard;

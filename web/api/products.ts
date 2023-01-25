@@ -21,7 +21,7 @@ export class ProductsApi {
     return response.data;
   }
 
-  static async createProduct(product: Omit<Product, 'id'>) {
+  static async createProduct(product: Omit<Product, 'id'>): Promise<Product> {
     const response = await backend.post('/products', product);
     return response.data;
   }
