@@ -15,23 +15,26 @@ public class Product {
     private int quantity;
     private String description;
     private String type;
+    private double price;
     private String manufacturer;
 
-    public Product(String displayName, int quantity, String description, String type, String manufacturer) {
+    public Product(String displayName, int quantity, String description, String type, String manufacturer, double price) {
         this.displayName = displayName;
         this.quantity = quantity;
         this.description = description;
         this.type = type;
         this.manufacturer = manufacturer;
+        this.price = price;
     }
 
-    public Product(String id, String displayName, int quantity, String description, String type, String manufacturer) {
+    public Product(String id, String displayName, int quantity, String description, String type, String manufacturer, double price) {
         this.id = id;
         this.displayName = displayName;
         this.quantity = quantity;
         this.description = description;
         this.type = type;
         this.manufacturer = manufacturer;
+        this.price = price;
     }
 }
 

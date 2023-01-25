@@ -18,7 +18,8 @@ public class ProductsService {
                 product.getQuantity(),
                 product.getDescription(),
                 product.getType(),
-                product.getManufacturer());
+                product.getManufacturer(),
+                product.getPrice());
         return productsRepository.save(p);
     }
 

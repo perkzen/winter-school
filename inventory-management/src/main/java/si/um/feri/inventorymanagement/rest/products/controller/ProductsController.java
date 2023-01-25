@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("products")
+@CrossOrigin(origins = "http://localhost:3000")
 public class ProductsController {
     @Autowired
     private ProductsService productsService;
@@ -26,7 +27,7 @@ public class ProductsController {
         return ResponseEntity.ok(p);
     }
 
-    @GetMapping("all")
+    @GetMapping
     public ResponseEntity<List<Product>> getProducts() {
         List<Product> products = productsService.getProducts();
         return ResponseEntity.ok(products);
