@@ -8,7 +8,7 @@ import Header from '../../components/header';
 const Product = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: product } = useQuery('product', () => {
+  const { data: product, refetch: refetchProduct } = useQuery('product', () => {
     return ProductsApi.getProduct(id as string);
   });
 
@@ -18,7 +18,7 @@ const Product = () => {
         title={'Edit product'}
         subtitle={'Edit existing product in your inventory'}
       />
-      <ProductForm product={product} isEdit />
+      <ProductForm product={product} isEdit refetchProducts={refetchProduct} />
     </>
   );
 };

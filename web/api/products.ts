@@ -10,6 +10,11 @@ export interface Product {
   type: string;
 }
 
+export interface UpdateProduct {
+  id: string;
+  product: Omit<Product, 'id'>;
+}
+
 export class ProductsApi {
   static async getProducts(): Promise<Product[]> {
     const response = await backend.get('/products');
@@ -26,8 +31,11 @@ export class ProductsApi {
     return response.data;
   }
 
-  static async updateProduct(product: Product) {
-    const response = await backend.put(`/products/${product.id}`, product);
+  static async updateProduct(payload: UpdateProduct) {
+    const response = await backend.put(
+      `/products/${payload.id}`,
+      payload.product
+    );
     return response.data;
   }
 

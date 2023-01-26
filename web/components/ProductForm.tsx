@@ -1,16 +1,21 @@
 import React, { FC, useEffect } from 'react';
-import { Product, ProductsApi } from '../api/products';
+import { Product, ProductsApi, UpdateProduct } from '../api/products';
 import { useForm } from 'react-hook-form';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/router';
 
 interface ProductFormProps {
   product?: Product;
   isEdit?: boolean;
+  refetchProducts?: () => void;
 }
 
-const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
+const ProductForm: FC<ProductFormProps> = ({
+  product,
+  isEdit,
+  refetchProducts,
+}) => {
   const { register, handleSubmit, formState, reset } = useForm<
     Omit<Product, 'id'>
   >({
@@ -47,6 +52,7 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
   );
 
   const router = useRouter();
+  const id = isEdit ? (router.query.id as string) : '';
 
   const handleDelete = async () => {
     if (!product) return;
@@ -59,17 +65,25 @@ const ProductForm: FC<ProductFormProps> = ({ product, isEdit }) => {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    await toast.promise(saveProduct(data), {
-      loading: 'Saving...',
-      success: 'Saved!',
-      error: 'Error',
-    });
+    await toast.promise(
+      isEdit ? updateProduct({ id: id, product: data }) : saveProduct(data),
+      {
+        loading: 'Saving...',
+        success: 'Saved!',
+        error: 'Error',
+      }
+    );
     reset();
   });
 
-  const { mutateAsync: updateProduct } = useMutation((product: Product) =>
-    ProductsApi.updateProduct(product)
-  );
+  const { mutateAsync: updateProduct } = useMutation({
+    mutationFn: (payload: UpdateProduct) => ProductsApi.updateProduct(payload),
+    onSuccess: () => {
+      if (isEdit && product && refetchProducts) {
+        refetchProducts();
+      }
+    },
+  });
 
   return (
     <div className={'flex justify-center items-center w-full mt-5'}>
