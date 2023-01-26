@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ "master" ]
   workflow_dispatch:
+  
+env:
+ GITHUB_TOKEN: ${{ github.token }}
 
 jobs:
   build:
@@ -24,3 +27,13 @@ jobs:
         with:
           name: backend_jar
           path: inventory-management/staging
+      - name: sonarQA
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=perkzen_winter-school -Dsonar.qualitygate.wait=false
+        working-directory: inventory-management
+
+
+
+
